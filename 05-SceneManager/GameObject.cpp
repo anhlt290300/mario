@@ -12,7 +12,7 @@ CGameObject::CGameObject()
 {
 	x = y = 0;
 	vx = vy = 0;
-	nx = 1;	
+	nx = 1;
 	state = -1;
 	isDeleted = false;
 }
@@ -24,7 +24,7 @@ void CGameObject::RenderBoundingBox()
 
 	LPTEXTURE bbox = CTextures::GetInstance()->Get(ID_TEX_BBOX);
 
-	float l,t,r,b; 
+	float l, t, r, b;
 
 	GetBoundingBox(l, t, r, b);
 	rect.left = 0;
@@ -32,7 +32,7 @@ void CGameObject::RenderBoundingBox()
 	rect.right = (int)r - (int)l;
 	rect.bottom = (int)b - (int)t;
 
-	float cx, cy; 
+	float cx, cy;
 	CGame::GetInstance()->GetCamPos(cx, cy);
 
 	CGame::GetInstance()->Draw(x - cx, y - cy, bbox, &rect, BBOX_ALPHA);
@@ -41,4 +41,15 @@ void CGameObject::RenderBoundingBox()
 CGameObject::~CGameObject()
 {
 
+}
+
+bool CGameObject::checkObjectInCamera(CGameObject* obj)
+{
+	float w = 32.0f;
+	float h = 32.0f;
+	if (obj->x + w <= (CGame::GetInstance()->GetCamX()) || (CGame::GetInstance()->GetCamX()) + SCREEN_WIDTH <= obj->x)
+		return false;
+	if (obj->y + h <= (CGame::GetInstance()->GetCamY()) || (CGame::GetInstance()->GetCamY()) + SCREEN_HEIGHT + h <= obj->y)
+		return false;
+	return true;
 }

@@ -6,26 +6,28 @@
 #include "Brick.h"
 #include "Mario.h"
 #include "Goomba.h"
+#include "Map.h"
+
 //#include "Koopas.h"
 
 
-class CPlayScene: public CScene
+class CPlayScene : public CScene
 {
-protected: 
+protected:
 	// A play scene has to have player, right? 
-	LPGAMEOBJECT player;					
-
-	vector<LPGAMEOBJECT> objects;
+	CMario* player = NULL;
 
 	void _ParseSection_SPRITES(string line);
 	void _ParseSection_ANIMATIONS(string line);
 
 	void _ParseSection_ASSETS(string line);
 	void _ParseSection_OBJECTS(string line);
+	void _ParseSection_TILEMAP(string line);
 
 	void LoadAssets(LPCWSTR assetFile);
-	
-public: 
+
+
+public:
 	CPlayScene(int id, LPCWSTR filePath);
 
 	virtual void Load();
@@ -33,12 +35,33 @@ public:
 	virtual void Render();
 	virtual void Unload();
 
-	LPGAMEOBJECT GetPlayer() { return player; }
+	CMario* GetPlayer() { return player; }
+
+	void SetCam(float cx, float cy);
 
 	void Clear();
 	void PurgeDeletedObjects();
 
 	static bool IsGameObjectDeleted(const LPGAMEOBJECT& o);
+	Map* map = NULL;
+
+	void PutPlayer(CMario* m)
+	{
+		if (dynamic_cast<CMario*>(objects[0]))
+			objects[0] = m;
+	}
+	void SetPlayer(CMario* mario) { player = mario; }
+
+	vector<LPGAMEOBJECT> objects;
+
+	int screenId = -1;
+
+	bool isFlyCam = false;
+	bool isHiddenMap = false;
+	int remainingTime;
+
+	void BackupPlayerInfo();
+	void LoadBackupPlayerInfo();
 };
 
 typedef CPlayScene* LPPLAYSCENE;
