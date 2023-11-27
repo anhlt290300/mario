@@ -130,7 +130,7 @@ effect.txt
 #model = 1 long pipe
 #model = 2 medium pipe
 
-77	359	353	1
+77	360	352	1
 
 77	1800	360	2
 
