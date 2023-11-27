@@ -42,7 +42,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	this->GetBoundingBox(l, t, r, b);
 	ay = MARIO_GRAVITY;
 
-
+	DebugOut(L"x %f\n", x);
 	LPGAME game = CGame::GetInstance();
 	CPlayScene* playScene = (LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene();
 

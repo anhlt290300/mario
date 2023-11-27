@@ -42,7 +42,7 @@ int CPlatform::IsBlocking(float nx, float ny, CGameObject* target)
 
 void CPlatform::Render()
 {
-	RenderBoundingBox();
+	//RenderBoundingBox();
 }
 
 void CPlatform::GetBoundingBox(float& l, float& t, float& r, float& b)

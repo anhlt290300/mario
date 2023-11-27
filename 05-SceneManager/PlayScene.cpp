@@ -12,6 +12,7 @@
 #include "ColorBox.h"
 #include "Pipe.h"
 #include "Backup.h"
+#include "Piranha.h"
 
 #include "SampleKeyEventHandler.h"
 
@@ -156,6 +157,11 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		int type = (int)atof(tokens[3].c_str());
 		obj = new CPipe(x, y, type);
 		break;
+	}
+	case OBJECT_TYPE_PIRANHA: 
+	{ 
+		obj = new CPiranha(x, y); 
+		break; 
 	}
 	case OBJECT_TYPE_PORTAL:
 	{
