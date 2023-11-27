@@ -1,11 +1,14 @@
 #include "FireBall.h"
-
+#include "ColorBox.h"
 void CFireBall::GetBoundingBox(float& left, float& top, float& right, float& bottom)
 {
-	left = x - FIRE_BALL_BBOX_WIDTH / 2;
-	top = y - FIRE_BALL_BBOX_HEIGHT / 2;
-	right = left + FIRE_BALL_BBOX_WIDTH;
-	bottom = top + FIRE_BALL_BBOX_HEIGHT;
+	if (state != FIRE_BALL_DISAPPEAR) {
+		left = x - FIRE_BALL_BBOX_WIDTH / 2;
+		top = y - FIRE_BALL_BBOX_HEIGHT / 2;
+		right = left + FIRE_BALL_BBOX_WIDTH;
+		bottom = top + FIRE_BALL_BBOX_HEIGHT;
+	}
+	else left = top = right = bottom = 0;
 }
 
 void CFireBall::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
@@ -29,7 +32,9 @@ void CFireBall::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 void CFireBall::Render()
 {
-	int aniId = FIREBALL_ANI;
+	int aniId = FIREBALL_ANI_MOVE;
+	if (state == FIRE_BALL_DISAPPEAR) aniId = FIREBALL_ANI_BOOM;
+
 	CAnimations::GetInstance()->Get(aniId)->Render(x, y);
 	//RenderBoundingBox();
 }
@@ -42,15 +47,13 @@ void CFireBall::OnNoCollision(DWORD dt)
 
 void CFireBall::OnCollisionWith(LPCOLLISIONEVENT e)
 {
-	if (e->ny < 0 && state == FIRE_FROM_MARIO)
+	if (e->ny != 0 && !dynamic_cast<CColorBox*>(e->obj))
 	{
-		vy = -FIRE_BALL_BOUNCE_SPEED;
+		
+		SetState(FIRE_BALL_DISAPPEAR);
 
 	}
-	else if (e->ny > 0) {
-		ay = FIRE_GRAVITY;
-	}
-	else if (e->nx != 0)
+	else if (e->nx != 0 )
 	{
 		SetState(FIRE_BALL_DISAPPEAR);
 	}
@@ -63,11 +66,12 @@ void CFireBall::OnCollisionWith(LPCOLLISIONEVENT e)
 
 int CFireBall::IsCollidable()
 {
-	if (state == FIRE_FROM_MARIO) {
+	/*if (state == FIRE_FROM_MARIO) {
 		return 1;
 	}
 	else
-		return 0;
+		return 0;*/
+	return 1;
 }
 
 CFireBall::CFireBall(float x, float y) :CGameObject(x, y)

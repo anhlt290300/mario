@@ -1,6 +1,7 @@
 #include "PiranhaFire.h"
 #include "Mario.h"
 #include "PlayScene.h"
+#include "FireBall.h"
 
 CPiranhaFire::CPiranhaFire(float x, float y, int type) : CGameObject(x, y)
 {
@@ -194,7 +195,30 @@ bool CPiranhaFire::GetSafeZone()
 
 void CPiranhaFire::ShootFire()
 {
-	
+	CFireBall* fireBall = new CFireBall(x, y - ADJUST_FPP_SHOOT_FIRE_BALL_HEIGHT);
+	int directionYFireball = 0;
+	fireBall->SetDirectionX(nx);
+	fireBall->isEnemyShoot = true;
+	if (isBottom) {
+		fireBall->SetDirectionY(1);
+		if (isFar) {
+			fireBall->SetState(FIRE_BALL_STATE_FPP_SHOOT_FAR);
+		}
+		else {
+			fireBall->SetState(FIRE_BALL_STATE_FPP_SHOOT_NEAR);
+		}
+	}
+	else {
+		fireBall->SetDirectionY(-1);
+		if (isFar) {
+			fireBall->SetState(FIRE_BALL_STATE_FPP_SHOOT_FAR);
+		}
+		else {
+			fireBall->SetState(FIRE_BALL_STATE_FPP_SHOOT_NEAR);
+		}
+	}
+	CPlayScene* scene = (CPlayScene*)CGame::GetInstance()->GetCurrentScene();
+	scene->objects.push_back(fireBall);
 }
 
 void CPiranhaFire::GetMarioRangeCurrent()

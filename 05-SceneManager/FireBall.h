@@ -3,11 +3,13 @@
 #include "Mario.h"
 #include "PlayScene.h"
 
-#define FIREBALL_ANI    2203
+
+#define FIREBALL_ANI_MOVE    2203
+#define FIREBALL_ANI_BOOM	 2204
 #define FIRE_BALL_BBOX_WIDTH 9
 #define FIRE_BALL_BBOX_HEIGHT 7
 
-#define FIRE_GRAVITY 0.0006f
+#define FIRE_GRAVITY 0.001f
 #define FIRE_BALL_SPEED 0.15f
 
 #define FIRE_FROM_MARIO 100
@@ -18,8 +20,8 @@
 #define FIRE_BALL_DISAPPEAR 300
 
 #define	FIRE_BALL_FPP_SHOOT_SPEED_Y 0.03f
-#define FIRE_BALL_FPP_SHOOT_SPEED_X_NEAR 0.03f
-#define FIRE_BALL_FPP_SHOOT_SPEED_X_FAR 0.08f
+#define FIRE_BALL_FPP_SHOOT_SPEED_X_NEAR 0.07f
+#define FIRE_BALL_FPP_SHOOT_SPEED_X_FAR 0.07f
 
 #define ADJUST_FPP_SHOOT_FIRE_BALL_HEIGHT 10
 
@@ -40,10 +42,13 @@ protected:
 	virtual void OnNoCollision(DWORD dt);
 public:
 	CFireBall(float x, float y);
+
 	virtual void SetState(int state);
 
 	virtual int IsCollidable();
-	virtual int IsBlocking() { return 1; }
+	virtual int IsBlocking(float nx, float ny, CGameObject* target) {
+		return true;
+	}
 
 	BOOLEAN isEnemyShoot;
 	BOOLEAN isDisappear = false;
