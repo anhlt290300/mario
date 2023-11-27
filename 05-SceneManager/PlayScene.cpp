@@ -13,6 +13,7 @@
 #include "Pipe.h"
 #include "Backup.h"
 #include "Piranha.h"
+#include "PiranhaFire.h"
 
 #include "SampleKeyEventHandler.h"
 
@@ -162,6 +163,11 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	{ 
 		obj = new CPiranha(x, y); 
 		break; 
+	}
+	case OBJECT_TYPE_FIRE_PIRANHA: {
+		int type = (int)atof(tokens[3].c_str());
+		obj = new CPiranhaFire(x, y, type); 
+		break;
 	}
 	case OBJECT_TYPE_PORTAL:
 	{
