@@ -15,10 +15,15 @@ CMushroom::CMushroom(float x, float y) : CGameObject(x, y)
 
 void CMushroom::GetBoundingBox(float& left, float& top, float& right, float& bottom)
 {
-	left = x - MUSHROOM_BBOX_WIDTH / 2;
-	top = y - MUSHROOM_BBOX_HEIGHT / 2;
-	right = left + MUSHROOM_BBOX_WIDTH;
-	bottom = top + MUSHROOM_BBOX_HEIGHT;
+	if (beforeDelete) {
+		left = top = right = bottom = 0;
+	}
+	else {
+		left = x - MUSHROOM_BBOX_WIDTH / 2;
+		top = y - MUSHROOM_BBOX_HEIGHT / 2;
+		right = left + MUSHROOM_BBOX_WIDTH;
+		bottom = top + MUSHROOM_BBOX_HEIGHT;
+	}
 }
 
 void CMushroom::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
@@ -28,6 +33,10 @@ void CMushroom::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	if (y <= minY)
 	{
 		SetState(MUSHROOM_STATE_RUN);
+	}
+
+	if (beforeDelete) {
+		ax = ay = 0;
 	}
 
 	float sl, st, sr, sb, left, top, right, bottom;
@@ -41,6 +50,15 @@ void CMushroom::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		OnCollisionWith(e);
 	}
 
+	for (size_t i = 0; i < ListEffect.size(); i++)
+	{
+		ListEffect[i]->Update(dt, coObjects);
+		if (ListEffect[i]->isDeleted) {			
+			ListEffect.erase(ListEffect.begin() + i);
+			isDeleted = true;
+		}
+	}
+
 	CGameObject::Update(dt, coObjects);
 	CCollision::GetInstance()->Process(this, dt, coObjects);
 }
@@ -51,8 +69,12 @@ void CMushroom::Render()
 
 	aniId = ID_ANI_MUSHROOM;
 
-	CAnimations::GetInstance()->Get(aniId)->Render(x, y);
-	RenderBoundingBox();
+	if(!beforeDelete) CAnimations::GetInstance()->Get(aniId)->Render(x, y);
+
+	for (int i = 0; i < ListEffect.size(); i++)	{
+		ListEffect[i]->Render();
+	}
+	//RenderBoundingBox();
 }
 
 void CMushroom::SetState(int state)
@@ -90,13 +112,18 @@ void CMushroom::OnCollisionWith(LPCOLLISIONEVENT e)
 	CMario* mario = (CMario*)((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
 	if (e->obj == mario) {
 		//TODO: Score
-		isDeleted = true;
+	
 		if (mario->GetLevel() == MARIO_LEVEL_RACOON) {
+			CScore* _obj = new CScore(GetX(), GetY(), SCORE_2000);
+			ListEffect.push_back(_obj);
+			beforeDelete = true;
 			mario->SetLive(1);
 		}
 		else {
 			mario->SetLevel(MARIO_LEVEL_BIG);
-			//CScore* _obj = new CScore(GetX(), GetY(), SCORE_1000);
+			CScore* _obj = new CScore(GetX(), GetY(), SCORE_1000);
+			ListEffect.push_back(_obj);
+			beforeDelete = true;
 		}
 			
 	}

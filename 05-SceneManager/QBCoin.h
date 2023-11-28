@@ -23,6 +23,9 @@ protected:
 	float minY;
 	float heightFinish;
 
+	vector<LPGAMEOBJECT> ListEffect;
+	bool beforeDelete = false;
+
 	BOOLEAN isFall = false;
 public:
 	virtual void GetBoundingBox(float& left, float& top, float& right, float& bottom) { left = top = right = bottom = 0; }

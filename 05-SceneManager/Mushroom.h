@@ -21,6 +21,9 @@ protected:
 
 	float minY;
 
+	vector<LPGAMEOBJECT> ListEffect;
+	bool beforeDelete = false;
+
 public:
 	CMushroom(float x, float y);
 
