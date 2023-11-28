@@ -2,9 +2,9 @@
 #include "Brick.h"
 #include "Mario.h"
 #include "PlayScene.h"
-//#include "Leaf.h"
-//#include "QBCoin.h"
-//#include "Mushroom.h"
+#include "Leaf.h"
+#include "QBCoin.h"
+#include "Mushroom.h"
 
 void CQuestionBrick::GetBoundingBox(float& left, float& top, float& right, float& bottom)
 {
@@ -56,27 +56,27 @@ void CQuestionBrick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 	CMario* mario = (CMario*)((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
 	CPlayScene* scene = (CPlayScene*)CGame::GetInstance()->GetCurrentScene();
-	//if (isOpened) {
-	//	if (objType == QUESTION_BRICK_ITEM) {
-	//		if (mario->GetLevel() == MARIO_LEVEL_BIG) {
-	//			CLeaf* leaf = new CLeaf(x, y);
-	//			leaf->SetState(LEAF_STATE_UP);
-	//			scene->objects.push_back(leaf);//insert(scene->objects.begin() + 1, leaf);
-	//		}
-	//		if (mario->GetLevel() == MARIO_LEVEL_SMALL) {
-	//			CMushroom* mushroom = new CMushroom(x, y);
-	//			mushroom->SetState(MUSHROOM_STATE_UP);
-	//			scene->objects.insert(scene->objects.begin() + 1, mushroom);//push_back(mushroom);
-	//		}
-	//	}
-	//	else {
-	//		QBCoin* coin = new QBCoin(x, y);
-	//		coin->SetState(QB_COIN_STATE_UP);
-	//		scene->objects.insert(scene->objects.begin() + 1, coin);
-	//		mario->SetCoin(mario->GetCoin() + 1);
-	//	}
-	//	isOpened = false;
-	//}
+	if (isOpened) {
+		if (objType == QUESTION_BRICK_ITEM) {
+			if (mario->GetLevel() == MARIO_LEVEL_BIG) {
+				CLeaf* leaf = new CLeaf(x, y);
+				leaf->SetState(LEAF_STATE_UP);
+				scene->objects.push_back(leaf);
+			}
+			if (mario->GetLevel() == MARIO_LEVEL_SMALL) {
+				CMushroom* mushroom = new CMushroom(x, y);
+				mushroom->SetState(MUSHROOM_STATE_UP);
+				scene->objects.insert(scene->objects.begin() + 1, mushroom);
+			}
+		}
+		else {
+			QBCoin* coin = new QBCoin(x, y);
+			coin->SetState(QB_COIN_STATE_UP);
+			scene->objects.insert(scene->objects.begin() + 1, coin);
+			mario->SetCoin(mario->GetCoin() + 1);
+		}
+		isOpened = false;
+	}
 
 
 	CGameObject::Update(dt, coObjects);

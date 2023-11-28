@@ -51,7 +51,7 @@ void CMushroom::Render()
 	aniId = ID_ANI_MUSHROOM;
 
 	CAnimations::GetInstance()->Get(aniId)->Render(x, y);
-	//RenderBoundingBox();
+	RenderBoundingBox();
 }
 
 void CMushroom::SetState(int state)
