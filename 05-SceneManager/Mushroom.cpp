@@ -1,6 +1,7 @@
 #include "Mushroom.h"
 #include "Mario.h"
 #include "PlayScene.h"
+#include "Score.h"
 
 CMushroom::CMushroom(float x, float y) : CGameObject(x, y)
 {
@@ -93,6 +94,10 @@ void CMushroom::OnCollisionWith(LPCOLLISIONEVENT e)
 		if (mario->GetLevel() == MARIO_LEVEL_RACOON) {
 			mario->SetLive(1);
 		}
-		else mario->SetLevel(MARIO_LEVEL_BIG);
+		else {
+			mario->SetLevel(MARIO_LEVEL_BIG);
+			//CScore* _obj = new CScore(GetX(), GetY(), SCORE_1000);
+		}
+			
 	}
 }
