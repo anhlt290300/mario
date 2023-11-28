@@ -23,7 +23,7 @@ CSprite::CSprite(int id, int left, int top, int right, int bottom, LPTEXTURE tex
 
 	sprite.TexSize.x = spriteWidth / texWidth;
 	sprite.TexSize.y = spriteHeight / texHeight;
-
+	
 	sprite.ColorModulate = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
 	sprite.TextureIndex = 0;
 

@@ -14,6 +14,7 @@
 #include "Backup.h"
 #include "Piranha.h"
 #include "PiranhaFire.h"
+#include "QuestionBrick.h"
 
 #include "SampleKeyEventHandler.h"
 
@@ -167,6 +168,11 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	case OBJECT_TYPE_FIRE_PIRANHA: {
 		int type = (int)atof(tokens[3].c_str());
 		obj = new CPiranhaFire(x, y, type); 
+		break;
+	}
+	case OBJECT_TYPE_QUESTION_BRICK: {
+		int type = (int)atof(tokens[3].c_str());
+		obj = new CQuestionBrick(x, y, type);
 		break;
 	}
 	case OBJECT_TYPE_PORTAL:
