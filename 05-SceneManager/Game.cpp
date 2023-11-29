@@ -425,6 +425,7 @@ void CGame::ProcessKeyboard()
 	{
 		int KeyCode = keyEvents[i].dwOfs;
 		int KeyState = keyEvents[i].dwData;
+		DebugOut(L"keystate %d \n", KeyCode);
 		if ((KeyState & 0x80) > 0)
 			keyHandler->OnKeyDown(KeyCode);
 		else
@@ -437,7 +438,7 @@ bool CGame::IsKeyDown(int keyCode) {
 }
 
 bool CGame::IsKeyUp(int keyCode) {
-	return (this->keyStates[keyCode] & 0x80) > 0;
+	return (this->keyStates[keyCode] & 0x80) == 0;
 }
 
 //bool CGame::IsKeyPressed(int keyCode)

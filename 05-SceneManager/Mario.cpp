@@ -12,6 +12,7 @@
 #include "BaseMarioState.h"
 #include "MarioStateSmall.h"
 #include "MarioStateBig.h"
+#include "MarioStateRacoon.h"
 
 #include "Collision.h"
 #include "PlayScene.h"
@@ -43,6 +44,12 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	this->GetBoundingBox(l, t, r, b);
 	ay = MARIO_GRAVITY;
 
+	if (isReturnY) {
+		//DebugOut(L"isReturnY %d\n", isReturnY);
+		y = y - MARIO_SIT_HEIGHT_ADJUST;
+		isReturnY = false;
+	}
+
 	//DebugOut(L"x %f\n", x);
 	LPGAME game = CGame::GetInstance();
 	CPlayScene* playScene = (LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene();
@@ -53,7 +60,9 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	if (game->IsKeyDown(DIK_2)) {
 		SetLevel(MARIO_LEVEL_BIG);
 	}
-
+	if (game->IsKeyDown(DIK_3)) {
+		SetLevel(MARIO_LEVEL_RACOON);
+	}
 	if (game->IsKeyDown(DIK_5)) {
 		SetPosition(2012, 250);
 	}
@@ -73,11 +82,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		}
 	}
 
-	if (isReturnY) {
-		//DebugOut(L"isReturnY %d\n", isReturnY);
-		y = y - 10;
-		isReturnY = false;
-	}	
+	
 
 	this->vy += ay * dt;
 
@@ -208,7 +213,18 @@ void CMario::SetState(int state)
 	//DebugOut(L"state %d \n", state);
 	this->state = state;
 	// DIE is the end state, cannot be changed! 
-	//if (this->state == MARIO_STATE_DIE) return; 
+	if (this->state == MARIO_STATE_DIE) return; 
+	switch (state) {
+		case MARIO_STATE_SIT_RELEASE:
+			if (isSitting)
+			{
+				isSitting = false;
+				state = MARIO_STATE_IDLE;
+				y -= MARIO_SIT_HEIGHT_ADJUST;
+			}
+			break;
+	}
+	CGameObject::SetState(state);
 
 }
 
@@ -229,6 +245,8 @@ void CMario::SitStateUpdate()
 		walkState = MarioWalkState::Sit;
 	}
 	if (game->IsKeyUp(DIK_DOWN) && walkState == MarioWalkState::Sit) {
+
+		y -= MARIO_SIT_HEIGHT_ADJUST;
 		walkState = MarioWalkState::Idle;
 	}
 }
@@ -357,6 +375,10 @@ void CMario::SetLevel(int l)
 		break;
 	case MARIO_LEVEL_BIG:
 		this->stateHandler = new MarioStateBig(this);
+		break;
+	
+	case MARIO_LEVEL_RACOON:
+		this->stateHandler = new MarioStateRacoon(this);
 		break;
 	}
 }

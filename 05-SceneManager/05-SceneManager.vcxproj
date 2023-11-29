@@ -167,6 +167,7 @@
     <ClCompile Include="Map.cpp" />
     <ClCompile Include="Mario.cpp" />
     <ClCompile Include="MarioStateBig.cpp" />
+    <ClCompile Include="MarioStateRacoon.cpp" />
     <ClCompile Include="MarioStateSmall.cpp" />
     <ClCompile Include="Mushroom.cpp" />
     <ClCompile Include="Pipe.cpp" />
@@ -206,6 +207,7 @@
     <ClInclude Include="Map.h" />
     <ClInclude Include="Mario.h" />
     <ClInclude Include="MarioStateBig.h" />
+    <ClInclude Include="MarioStateRacoon.h" />
     <ClInclude Include="MarioStateSmall.h" />
     <ClInclude Include="Mushroom.h" />
     <ClInclude Include="Pipe.h" />

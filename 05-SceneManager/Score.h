@@ -13,7 +13,7 @@
 
 #define SCORE_EFFECT_MAX_HEIGHT 30
 #define SCORE_EFFECT_SPEED 0.1f
-
+	
 #define SCORE_100 1
 #define SCORE_200 2
 #define SCORE_400 3

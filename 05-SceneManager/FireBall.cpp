@@ -23,7 +23,7 @@ void CFireBall::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	if (isDisappear && GetTickCount64() - start_disappear > FIRE_BALL_DISAPPEAR_EFFECT_TIME_OUT) { // effect disappear
 		start_disappear = -1;
 		isDisappear = false;
-		isDeleted = true;
+		isDeleted = true;		
 	}
 
 	CGameObject::Update(dt, coObjects);
@@ -106,7 +106,7 @@ void CFireBall::SetState(int state)
 		ay = 0;
 		break;
 	case FIRE_BALL_DISAPPEAR:
-		vx = 0;
+		vx = 0;		
 		vy = 0;
 		ay = 0;
 		start_disappear = GetTickCount64();

@@ -7,7 +7,7 @@
 #define QBCOIN_BBOX_HEIGHT 14
 
 #define QB_COIN_MAX_HEIGHT 50
-#define QB_COIN_SPEED 0.1f
+#define QB_COIN_SPEED 0.2f
 #define HEIGHT_FINISH 30
 
 #define QB_COIN_STATE_UP 100

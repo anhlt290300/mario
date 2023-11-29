@@ -28,6 +28,8 @@ height	240
 34	textures\enemies4.png
 35	textures\enemies5.png
 36	textures\enemies6.png
+40	textures\fireball.png
+45	textures\boom.png
 80	textures\Map\world1-1_bank.png
 100	textures\HUD.png
 101	textures\hud_source.png

@@ -126,6 +126,9 @@
     <ClCompile Include="Score.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="MarioStateRacoon.cpp">
+      <Filter>mario</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Animation.h">
@@ -247,6 +250,9 @@
     </ClInclude>
     <ClInclude Include="Score.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MarioStateRacoon.h">
+      <Filter>mario</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
