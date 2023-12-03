@@ -8,12 +8,14 @@
 #include "Mario.h"
 #include "WorldPlayer.h"
 #include "PlayScene.h"
+#include "Timer.h"
 
 class CWorldScene :
     public CScene
 {
     CMario* mario = NULL;
     CWorldPlayer* player = NULL;
+    CTimer* gameTime = new CTimer(true, 0);
 
     int gameTimeRemain = 0;
     bool isTurnOnCamY = false;
