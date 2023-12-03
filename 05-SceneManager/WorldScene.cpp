@@ -2,6 +2,8 @@
 #include "Grass.h"
 #include "Door.h"
 #include "Blocker.h"
+#include "Hammer.h"
+#include "HelpBox.h"
 
 #define SCENE_SECTION_UNKNOWN -1
 #define SCENE_SECTION_ASSETS	1
@@ -121,6 +123,16 @@ void CWorldScene::_ParseSection_OBJECTS(string line)
 		int allowTop = atoi(tokens[6].c_str());
 
 		obj = new CBlocker(x, y, allowLeft, allowRight, allowBottom, allowTop);
+		break;
+	}
+	case OBJECT_HAMMER_WORLD_MAP:
+	{
+		obj = new CHammer(x, y);
+		break;
+	}
+	case OBJECT_HELP_WORLD_MAP:
+	{
+		obj = new CHelpBox(x, y);
 		break;
 	}
 	
