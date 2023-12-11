@@ -1,7 +1,7 @@
 #pragma once
-//#include "Character.h"
+#include "Character.h"
 #include "Mario.h"
-//#include "PowerBar.h"
+#include "PowerBar.h"
 
 #define ID_ANI_HUD 30012
 #define HUD_HEIGHT 32
@@ -34,8 +34,8 @@
 class HUD
 {
 	float x, y;
-	//Character _char;
-	//PowerBar* power;
+	Character _char;
+	PowerBar* power;
 public:
 	HUD(float x, float y);
 	void Render(CMario* mario, int remainingTime);

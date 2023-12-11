@@ -15,6 +15,7 @@
 #include "Piranha.h"
 #include "PiranhaFire.h"
 #include "QuestionBrick.h"
+#include "HUD.h"
 
 #include "SampleKeyEventHandler.h"
 
@@ -333,11 +334,14 @@ void CPlayScene::Render()
 {
 
 	CGame* game = CGame::GetInstance();
+	HUD* hud = new HUD(game->GetCamX() + HUD_WIDTH / 2, game->GetCamY() + game->GetScreenHeight() - HUD_HEIGHT / 2);
 	map->DrawMap();
 	for (int i = 0; i < objects.size(); i++)
 		objects[i]->Render();
 
+	hud->Render(player, remainingTime / 1000);
 }
+
 void CPlayScene::SetCam(float cx, float cy)
 {
 	int mw, mh;
