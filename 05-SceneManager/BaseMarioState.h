@@ -20,6 +20,14 @@ public:
 
 	virtual void JumpUpdate(DWORD dt);
 
+	virtual void holdingShellUpdate(DWORD dt);
+
+	virtual void warpUpdate(DWORD dt);
+
+	virtual void PowerMeterUpdate(DWORD dt);
+
+	virtual void AttackUpdate(DWORD dt);
+
 	virtual void Render() = 0;
 
 	virtual void GetBoundingBox(float& left, float& top, float& right, float& bottom);

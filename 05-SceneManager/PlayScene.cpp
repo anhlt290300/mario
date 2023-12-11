@@ -16,6 +16,7 @@
 #include "PiranhaFire.h"
 #include "QuestionBrick.h"
 #include "HUD.h"
+#include "Koopas.h"
 
 #include "SampleKeyEventHandler.h"
 
@@ -143,6 +144,12 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		float width = (float)atof(tokens[3].c_str());
 		float height = (float)atof(tokens[4].c_str());
 		obj = new CColorBox(x, y, width, height);
+		break;
+	}
+
+	case OBJECT_TYPE_KOOPAS: {
+		int type = (int)atof(tokens[3].c_str());
+		obj = new Koopas(x, y, type);
 		break;
 	}
 

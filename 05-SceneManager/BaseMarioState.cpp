@@ -1,7 +1,7 @@
 #include "BaseMarioState.h"
 #include "GameObject.h"
 #include "Mario.h"
-
+#include "Koopas.h"
 
 BaseMarioState::BaseMarioState(CMario* mario)
 {
@@ -11,7 +11,11 @@ BaseMarioState::BaseMarioState(CMario* mario)
 void BaseMarioState::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
 	WalkUpdate(dt);
+	PowerMeterUpdate(dt);
 	JumpUpdate(dt);
+	AttackUpdate(dt);
+	holdingShellUpdate(dt);
+	warpUpdate(dt);
 
 	CCollision::GetInstance()->Process(mario, dt, coObjects);
 	//DebugOut(L"vy: %f\n", mario->GetVY());
@@ -29,7 +33,7 @@ void BaseMarioState::WalkUpdate(DWORD dt)
 			mario->drag = MARIO_CROUCH_DRAG_FORCE;
 		}
 	}
-	if (game->IsKeyUp(DIK_DOWN) && mario->walkState == MarioWalkState::Sit) {
+	if (game->IsKeyReleased(DIK_DOWN) && mario->walkState == MarioWalkState::Sit) {
 		mario->isReturnY = true;
 		mario->walkState = MarioWalkState::Idle;
 
@@ -115,7 +119,7 @@ void BaseMarioState::JumpUpdate(DWORD dt)
 	if (mario->isOnPlatform) {
 		mario->jumpState = MarioJumpState::Idle;
 
-		if (game->IsKeyDown(DIK_S)) {
+		if (game->IsKeyPressed(DIK_S)) {
 			mario->jumpState = MarioJumpState::Jump;
 			mario->isOnPlatform = false;
 			mario->_jumpStartHeight = y;
@@ -131,7 +135,19 @@ void BaseMarioState::JumpUpdate(DWORD dt)
 	float height = 0;
 
 	switch (mario->jumpState)
-	{	
+	{
+	case MarioJumpState::Fly:
+		height = abs(mario->_jumpStartHeight - y - vy_temp * dt);
+		minJumpHeight = MARIO_MIN_HIGH_JUMP_HEIGHT;
+
+		if (height < minJumpHeight || (height < MARIO_SUPER_JUMP_HEIGHT && game->IsKeyDown(DIK_S))) {
+			vy_temp = -MARIO_SUPER_PUSH_FORCE - MARIO_GRAVITY * dt;
+		}
+		else {
+			mario->jumpState = MarioJumpState::Float;
+			vy_temp = -MARIO_SUPER_PUSH_FORCE / 2;
+		}
+		break;
 	case MarioJumpState::HighJump:
 		jumpHeight = MARIO_HIGH_JUMP_HEIGHT;
 		minJumpHeight = MARIO_MIN_HIGH_JUMP_HEIGHT;
@@ -158,6 +174,47 @@ void BaseMarioState::JumpUpdate(DWORD dt)
 	mario->SetVY(vy_temp);
 }
 
+void BaseMarioState::holdingShellUpdate(DWORD dt)
+{
+	if (mario->isDisable) return;
+
+	CGame* game = CGame::GetInstance();
+	if (mario->hand != NULL) {
+		if (mario->direct > 0) {
+			mario->hand->SetPosition(mario->GetX() + 10, mario->GetY());
+		}
+		else mario->hand->SetPosition(mario->GetX() - 10, mario->GetY());
+		if (game->IsKeyReleased(DIK_A)) {
+			dynamic_cast<Koopas*>(mario->hand)->isHeld = false;
+			mario->hand->SetPosition(mario->hand->GetX() + 5 * mario->direct, mario->hand->GetY() - 5);
+			mario->hand->SetState(KOOPAS_STATE_IS_KICKED);
+			mario->hand = NULL;
+		}
+	}
+
+}
+
+void BaseMarioState::warpUpdate(DWORD dt)
+{
+
+}
+
+void BaseMarioState::PowerMeterUpdate(DWORD dt)
+{
+	if (mario->isDisable) return;
+	float vx = mario->GetVX();
+
+	float maxRun = abs(vx) > MARIO_RUNNING_SPEED * 0.85f;
+
+	if (maxRun && mario->isOnPlatform)
+		mario->powerMeter = max(0.0f, min(mario->powerMeter + PMETER_UP_STEP * dt, PMETER_MAX + 1));
+	else if (mario->powerMeter > 0)
+		mario->powerMeter = max(0.0f, min(mario->powerMeter - PMETER_DOWN_STEP * dt, PMETER_MAX));
+}
+
+void BaseMarioState::AttackUpdate(DWORD dt)
+{
+}
 
 void BaseMarioState::GetBoundingBox(float& left, float& top, float& right, float& bottom)
 {
