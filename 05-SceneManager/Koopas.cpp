@@ -5,6 +5,7 @@
 #include "ColorBox.h"
 #include "QuestionBrick.h"
 #include "Goomba.h"
+#include "GoldBrick.h"
 
 Koopas::Koopas(float x, float y, int model) : CGameObject(x, y)
 {
@@ -284,9 +285,42 @@ void Koopas::OnCollisionWith(LPCOLLISIONEVENT e)
 		OnCollisionWithColorBox(e);
 	else if (dynamic_cast<CQuestionBrick*>(e->obj))
 		OnCollisionWithQuestionBrick(e);
+	else if (dynamic_cast<CGoldBrick*>(e->obj))
+		OnCollisionWithGoldBrick(e);
 	else if (dynamic_cast<CGoomba*>(e->obj))
 		OnCollisionWithGoomba(e);
 }
+
+void Koopas::OnCollisionWithGoldBrick(LPCOLLISIONEVENT e)
+{
+	CGoldBrick* goldbrick = dynamic_cast<CGoldBrick*>(e->obj);
+
+	if (e->nx != 0 && goldbrick->objType == GOLD_BRICK_COIN) {
+		if (goldbrick->GetState() != GOLD_BRICK_STATE_TRANSFORM_COIN) {
+			if (state == KOOPAS_STATE_IS_KICKED) {
+				goldbrick->SetBreak(true);
+			}
+		}
+	}
+	//DebugOut(L"ObjType: %s", objType);
+
+	if (objType == KOOPAS_RED) {
+		if (e->ny < 0) {
+			if (state == KOOPAS_STATE_WALKING && objType == KOOPAS_RED) {
+				if (x <= goldbrick->GetX() - ADJUST_X_TO_RED_CHANGE_DIRECTION)
+				{
+					vy = 0;
+					vx = KOOPAS_WALKING_SPEED;
+				}
+				else if (x >= goldbrick->GetX() + ADJUST_X_TO_RED_CHANGE_DIRECTION) {
+					vy = 0;
+					vx = -KOOPAS_WALKING_SPEED;
+				}
+			}
+		}
+	}
+}
+
 
 void Koopas::OnCollisionWithColorBox(LPCOLLISIONEVENT e)
 {
