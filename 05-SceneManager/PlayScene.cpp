@@ -17,6 +17,8 @@
 #include "QuestionBrick.h"
 #include "HUD.h"
 #include "Koopas.h"
+#include "GoldBrick.h"
+
 
 #include "SampleKeyEventHandler.h"
 
@@ -161,6 +163,11 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	case OBJECT_TYPE_PIPE: {
 		int type = (int)atof(tokens[3].c_str());
 		obj = new CPipe(x, y, type);
+		break;
+	}
+	case OBJECT_TYPE_GOLD_BRICK: {
+		int type = (int)atof(tokens[3].c_str());
+		obj = new CGoldBrick(x, y, type);
 		break;
 	}
 	case OBJECT_TYPE_PLATFORM:
