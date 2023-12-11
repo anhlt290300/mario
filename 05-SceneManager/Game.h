@@ -41,7 +41,7 @@ class CGame
 	LPDIRECTINPUT8       di;		// The DirectInput object         
 	LPDIRECTINPUTDEVICE8 didv;		// The keyboard device 
 
-	BYTE  keyStates[KEYBOARD_STATE_SIZE];			// DirectInput keyboard state buffer 
+	//BYTE  keyStates[KEYBOARD_STATE_SIZE];			// DirectInput keyboard state buffer 
 	DIDEVICEOBJECTDATA keyEvents[KEYBOARD_BUFFER_SIZE];		// Buffered keyboard data
 
 	LPKEYEVENTHANDLER keyHandler;
@@ -88,6 +88,7 @@ public:
 
 	// Keyboard related functions 
 	void InitKeyboard();
+	//int IsKeyDown(int KeyCode);
 	void ProcessKeyboard();
 	void SetKeyHandler(LPKEYEVENTHANDLER handler) { keyHandler = handler; }
 
@@ -110,7 +111,6 @@ public:
 	void SetCamPos(float x, float y) { cam_x = x; cam_y = y; }
 	void GetCamPos(float& x, float& y) { x = cam_x; y = cam_y; }
 
-
 	float GetCamX() { return cam_x; }
 	float GetCamY() { return cam_y; }
 
@@ -124,13 +124,14 @@ public:
 
 	void _ParseSection_TEXTURES(string line);
 
-	bool IsKeyDown(int keyCode);
-	bool IsKeyUp(int keyCode);
-	//bool IsKeyReleased(int keyCode);
 
-	/*BYTE keyStates[256] = { ' ' };
+	bool IsKeyDown(int keyCode);
+	bool IsKeyPressed(int keyCode);
+	bool IsKeyReleased(int keyCode);
+
+	BYTE keyStates[256] = { ' ' };
 	BYTE keyPressed[256] = { 0 };
-	BYTE keyRelease[256] = { 0 };*/
+	BYTE keyRelease[256] = { 0 };
 
 	void SwitchToHiddenMap(int scene_id, int cx, int cy);
 	void SwitchToMainMap(int scene_id, int cx, int cy);

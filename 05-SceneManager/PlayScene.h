@@ -7,6 +7,8 @@
 #include "Mario.h"
 #include "Goomba.h"
 #include "Map.h"
+#include "QuestionBrick.h"
+#include "Timer.h"
 
 //#include "Koopas.h"
 
@@ -26,6 +28,7 @@ protected:
 
 	void LoadAssets(LPCWSTR assetFile);
 
+	CTimer* gameTime = new CTimer(true, GAME_TIME_LIMIT);
 
 public:
 	CPlayScene(int id, LPCWSTR filePath);
@@ -60,9 +63,9 @@ public:
 	bool isHiddenMap = false;
 	int remainingTime;
 
+	void SetStartTime(int time) { gameTime->SetTimeOut(time); }
 	void BackupPlayerInfo();
 	void LoadBackupPlayerInfo();
 };
 
 typedef CPlayScene* LPPLAYSCENE;
-

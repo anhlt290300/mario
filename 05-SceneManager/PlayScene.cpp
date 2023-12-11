@@ -130,7 +130,31 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		break;
 	}
 	case OBJECT_TYPE_BRICK: obj = new CBrick(x, y); break;
-	case OBJECT_TYPE_COIN: obj = new CCoin(x, y); break;	
+	case OBJECT_TYPE_COIN: obj = new CCoin(x, y); break;
+	case OBJECT_TYPE_FIRE_PIRANHA: {
+		int type = (int)atof(tokens[3].c_str());
+		obj = new CPiranhaFire(x, y, type); //FirePiranhaPlant
+		break;
+	}
+	case OBJECT_TYPE_PIRANHA: { obj = new CPiranha(x, y); break; }
+
+	case OBJECT_TYPE_COLORBOX: {
+		float width = (float)atof(tokens[3].c_str());
+		float height = (float)atof(tokens[4].c_str());
+		obj = new CColorBox(x, y, width, height);
+		break;
+	}
+
+	case OBJECT_TYPE_QUESTION_BRICK: {
+		int type = (int)atof(tokens[3].c_str());
+		obj = new CQuestionBrick(x, y, type);
+		break;
+	}
+	case OBJECT_TYPE_PIPE: {
+		int type = (int)atof(tokens[3].c_str());
+		obj = new CPipe(x, y, type);
+		break;
+	}
 	case OBJECT_TYPE_PLATFORM:
 	{
 
@@ -149,32 +173,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 
 		break;
 	}
-	case OBJECT_TYPE_COLORBOX: {
-		float width = (float)atof(tokens[3].c_str());
-		float height = (float)atof(tokens[4].c_str());
-		obj = new CColorBox(x, y, width, height);
-		break;
-	}
-	case OBJECT_TYPE_PIPE: {
-		int type = (int)atof(tokens[3].c_str());
-		obj = new CPipe(x, y, type);
-		break;
-	}
-	case OBJECT_TYPE_PIRANHA: 
-	{ 
-		obj = new CPiranha(x, y); 
-		break; 
-	}
-	case OBJECT_TYPE_FIRE_PIRANHA: {
-		int type = (int)atof(tokens[3].c_str());
-		obj = new CPiranhaFire(x, y, type); 
-		break;
-	}
-	case OBJECT_TYPE_QUESTION_BRICK: {
-		int type = (int)atof(tokens[3].c_str());
-		obj = new CQuestionBrick(x, y, type);
-		break;
-	}
+
 	case OBJECT_TYPE_PORTAL:
 	{
 		float r = (float)atof(tokens[3].c_str());
@@ -183,6 +182,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		obj = new CPortal(x, y, r, b, scene_id);
 		break;
 	}
+
 	default:
 		DebugOut(L"[ERROR] Invalid object type: %d\n", object_type);
 		return;
@@ -288,6 +288,7 @@ void CPlayScene::Load()
 
 	DebugOut(L"[INFO] Done loading scene  %s\n", sceneFilePath);
 
+	gameTime->Start();
 }
 
 void CPlayScene::Update(DWORD dt)
@@ -302,7 +303,8 @@ void CPlayScene::Update(DWORD dt)
 		isHiddenMap = false;
 	}
 
-
+	gameTime->Update(dt);
+	remainingTime = gameTime->GetTime();
 
 	vector<LPGAMEOBJECT> coObjects;
 	for (size_t i = 1; i < objects.size(); i++)
@@ -362,6 +364,11 @@ void CPlayScene::SetCam(float cx, float cy)
 		cx = 112;
 		cy = -48;
 	}
+	/*else {
+		cy = (float)mh - (float)sh;
+	}*/
+	//if (cy <= -HUD_HEIGHT)//Top Edge
+	//	cy = -HUD_HEIGHT;
 	if (!isHiddenMap) {
 		if (cy + sh >= mh)//Bottom Edge
 			cy = (float)mh - (float)sh;
@@ -401,6 +408,7 @@ void CPlayScene::Unload()
 	objects.clear();
 	player = NULL;
 
+	gameTime->SetTimeOut(0);
 	delete map;
 
 	map = nullptr;

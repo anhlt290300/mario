@@ -7,6 +7,7 @@
 #include "Texture.h"
 #include "Animations.h"
 #include "PlayScene.h"
+#include "WorldScene.h"
 
 CGame* CGame::__instance = NULL;
 
@@ -409,27 +410,32 @@ void CGame::ProcessKeyboard()
 		}
 	}
 
-	keyHandler->KeyState((BYTE*)&keyStates);
+	//keyHandler->KeyState((BYTE*)&keyStates);
 
 	// Collect all buffered events
 	DWORD dwElements = KEYBOARD_BUFFER_SIZE;
 	hr = didv->GetDeviceData(sizeof(DIDEVICEOBJECTDATA), keyEvents, &dwElements, 0);
 	if (FAILED(hr))
 	{
-		DebugOut(L"[ERROR] DINPUT::	 failed. Error: %d\n", hr);
+		DebugOut(L"[ERROR] DINPUT::GetDeviceData failed. Error: %d\n", hr);
 		return;
-	}	
+	}
+	for (int i = 0; i < KEYBOARD_STATE_SIZE; i++)
+	{
+		keyPressed[i] = keyRelease[i] = 0;
+	}
 
 	// Scan through all buffered events, check if the key is pressed or released
 	for (DWORD i = 0; i < dwElements; i++)
 	{
 		int KeyCode = keyEvents[i].dwOfs;
 		int KeyState = keyEvents[i].dwData;
-		DebugOut(L"keystate %d \n", KeyCode);
 		if ((KeyState & 0x80) > 0)
-			keyHandler->OnKeyDown(KeyCode);
+			//keyHandler->OnKeyDown(KeyCode);
+			keyPressed[KeyCode] = 1;
 		else
-			keyHandler->OnKeyUp(KeyCode);
+			//keyHandler->OnKeyUp(KeyCode);
+			keyRelease[KeyCode] = 1;
 	}
 }
 
@@ -437,21 +443,15 @@ bool CGame::IsKeyDown(int keyCode) {
 	return (this->keyStates[keyCode] & 0x80) > 0;
 }
 
-bool CGame::IsKeyUp(int keyCode) {
-	return (this->keyStates[keyCode] & 0x80) == 0;
+bool CGame::IsKeyPressed(int keyCode)
+{
+	return keyPressed[keyCode] == 1;
 }
 
-//bool CGame::IsKeyPressed(int keyCode)
-//{
-//	//return keyPressed[keyCode] == 1;
-//	return true;
-//}
-//
-//bool CGame::IsKeyReleased(int keyCode)
-//{
-//	//return keyRelease[keyCode] == 1;
-//	return true;
-//}
+bool CGame::IsKeyReleased(int keyCode)
+{
+	return keyRelease[keyCode] == 1;
+}
 
 #define MAX_GAME_LINE 1024
 
@@ -484,7 +484,11 @@ void CGame::_ParseSection_SCENES(string line)
 	if (id == MAIN_SCENE_ID || id == HIDDEN_SCENE_ID) {
 		LPSCENE scene = new CPlayScene(id, path);
 		scenes[id] = scene;
-	}	
+	}
+	else if (id == WORLD_MAP) {
+		LPSCENE scene = new CWorldScene(id, path);
+		scenes[id] = scene;
+	}
 }
 
 /*
@@ -602,7 +606,7 @@ void CGame::SwitchToHiddenMap(int scene_id, int cx, int cy)
 	}
 
 	CMario* mario = ((CPlayScene*)scenes[current_scene])->GetPlayer();
-	mario->SetPosition((float)cx, (float)cy);
+	mario->SetPosition(cx, cy);
 
 	if (dynamic_cast<CPlayScene*>(scenes[current_scene]))
 		((CPlayScene*)scenes[current_scene])->LoadBackupPlayerInfo();
@@ -621,7 +625,7 @@ void CGame::SwitchToMainMap(int scene_id, int cx, int cy)
 	this->SetKeyHandler(s->GetKeyEventHandler());
 
 	CMario* mario = ((CPlayScene*)scenes[next_scene])->GetPlayer();
-	mario->SetPosition((float)cx, (float)cy);
+	mario->SetPosition(cx, cy);
 	((CPlayScene*)s)->PutPlayer(mario);
 
 	if (dynamic_cast<CPlayScene*>(scenes[current_scene]))

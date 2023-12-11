@@ -152,15 +152,20 @@
     <ClCompile Include="Animations.cpp" />
     <ClCompile Include="Backup.cpp" />
     <ClCompile Include="BaseMarioState.cpp" />
+    <ClCompile Include="Blocker.cpp" />
     <ClCompile Include="Brick.cpp" />
     <ClCompile Include="Coin.cpp" />
     <ClCompile Include="Collision.cpp" />
     <ClCompile Include="ColorBox.cpp" />
     <ClCompile Include="debug.cpp" />
+    <ClCompile Include="Door.cpp" />
     <ClCompile Include="FireBall.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="Goomba.cpp" />
+    <ClCompile Include="Grass.cpp" />
+    <ClCompile Include="Hammer.cpp" />
+    <ClCompile Include="HelpBox.cpp" />
     <ClCompile Include="HUD.cpp" />
     <ClCompile Include="Leaf.cpp" />
     <ClCompile Include="main.cpp" />
@@ -179,11 +184,15 @@
     <ClCompile Include="QBCoin.cpp" />
     <ClCompile Include="QuestionBrick.cpp" />
     <ClCompile Include="SampleKeyEventHandler.cpp" />
+    <ClCompile Include="Scence.cpp" />
     <ClCompile Include="Score.cpp" />
     <ClCompile Include="Sprite.cpp" />
     <ClCompile Include="Sprites.cpp" />
     <ClCompile Include="Textures.cpp" />
+    <ClCompile Include="Timer.cpp" />
     <ClCompile Include="Utils.cpp" />
+    <ClCompile Include="WorldPlayer.cpp" />
+    <ClCompile Include="WorldScene.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Animation.h" />
@@ -192,15 +201,20 @@
     <ClInclude Include="AssetIDs.h" />
     <ClInclude Include="Backup.h" />
     <ClInclude Include="BaseMarioState.h" />
+    <ClInclude Include="Blocker.h" />
     <ClInclude Include="Brick.h" />
     <ClInclude Include="Coin.h" />
     <ClInclude Include="Collision.h" />
     <ClInclude Include="ColorBox.h" />
     <ClInclude Include="debug.h" />
+    <ClInclude Include="Door.h" />
     <ClInclude Include="FireBall.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="Goomba.h" />
+    <ClInclude Include="Grass.h" />
+    <ClInclude Include="Hammer.h" />
+    <ClInclude Include="HelpBox.h" />
     <ClInclude Include="HUD.h" />
     <ClInclude Include="KeyEventHandler.h" />
     <ClInclude Include="Leaf.h" />
@@ -226,10 +240,35 @@
     <ClInclude Include="Sprites.h" />
     <ClInclude Include="Texture.h" />
     <ClInclude Include="Textures.h" />
+    <ClInclude Include="Timer.h" />
     <ClInclude Include="Utils.h" />
+    <ClInclude Include="WorldPlayer.h" />
+    <ClInclude Include="WorldScene.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="05-SceneManager.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="brick.txt" />
+    <Text Include="cloud.txt" />
+    <Text Include="coin.txt" />
+    <Text Include="effect.txt" />
+    <Text Include="goomba.txt" />
+    <Text Include="items.txt" />
+    <Text Include="mario-sample.txt" />
+    <Text Include="mario.txt" />
+    <Text Include="pipe.txt" />
+    <Text Include="piranhaPlant.txt" />
+    <Text Include="scene0005.txt" />
+    <Text Include="scene01.txt" />
+    <Text Include="scene02.txt" />
+    <Text Include="world-map.txt" />
+    <Text Include="world1-1-1.txt" />
+    <Text Include="worldmapObj.txt" />
+    <Text Include="world_1-1.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="mario.ico" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
