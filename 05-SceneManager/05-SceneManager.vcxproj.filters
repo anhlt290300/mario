@@ -46,6 +46,11 @@
     <ClCompile Include="Scence.cpp" />
     <ClCompile Include="Grass.cpp" />
     <ClCompile Include="HelpBox.cpp" />
+    <ClCompile Include="Character.cpp" />
+    <ClCompile Include="PowerBar.cpp" />
+    <ClCompile Include="Koopas.cpp" />
+    <ClCompile Include="GoldBrick.cpp" />
+    <ClCompile Include="PieceBrick.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Animation.h" />
@@ -97,6 +102,11 @@
     <ClInclude Include="Grass.h" />
     <ClInclude Include="HelpBox.h" />
     <ClInclude Include="Hammer.h" />
+    <ClInclude Include="Character.h" />
+    <ClInclude Include="PowerBar.h" />
+    <ClInclude Include="Koopas.h" />
+    <ClInclude Include="GoldBrick.h" />
+    <ClInclude Include="PieceBrick.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="05-SceneManager.rc" />
