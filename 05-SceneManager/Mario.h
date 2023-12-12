@@ -6,7 +6,7 @@
 #include "Utils.h"
 
 #include "debug.h"
-
+#include "Timer.h"
 
 #define MARIO_WALKING_SPEED		0.07f
 #define MARIO_RUNNING_SPEED		0.1f
@@ -134,7 +134,7 @@
 #define MARIO_RACOON_BBOX_WIDTH  16
 
 
-#define MARIO_SIT_HEIGHT_ADJUST ((MARIO_BIG_BBOX_HEIGHT-MARIO_BIG_SITTING_BBOX_HEIGHT)/2 +7)
+#define MARIO_SIT_HEIGHT_ADJUST ((MARIO_BIG_BBOX_HEIGHT-MARIO_BIG_SITTING_BBOX_HEIGHT)/2)
 
 #define MARIO_SMALL_BBOX_WIDTH  13
 #define MARIO_SMALL_BBOX_HEIGHT 12
@@ -180,8 +180,17 @@ class CMario : public CGameObject
 
 	void OnCollisionWithGoomba(LPCOLLISIONEVENT e);
 	void OnCollisionWithCoin(LPCOLLISIONEVENT e);
-	void OnCollisionWithQuestionBrick(LPCOLLISIONEVENT e);
 	void OnCollisionWithPortal(LPCOLLISIONEVENT e);
+	void OnCollisionWithBackgroundBlock(LPCOLLISIONEVENT e);
+	void OnCollisionWithQuestionBrick(LPCOLLISIONEVENT e);
+	void OnCollisionWithLeaf(LPCOLLISIONEVENT e);
+	void OnCollisionWithPiranha(LPCOLLISIONEVENT e);
+	void OnCollisionWithFireball(LPCOLLISIONEVENT e);
+	void OnCollisionWithKoopas(LPCOLLISIONEVENT e);
+	void OnCollisionWithGoldBrick(LPCOLLISIONEVENT e);
+	void OnCollisionWithPortalIn(LPCOLLISIONEVENT e);
+
+
 public:
 	CGameObject* obj = NULL;
 	//	CTail* tail;
@@ -222,6 +231,7 @@ public:
 	void OnCollisionWith(LPCOLLISIONEVENT e);
 
 	vector<LPGAMEOBJECT> ListEffect;
+	void ShootFire();
 	void SetLevel(int l);
 	void StartUntouchable() { untouchable = 1; untouchable_start = GetTickCount64(); }
 
@@ -272,6 +282,7 @@ public:
 	void SetLive(int l) { live = l; }
 	int GetLive() { return live; }
 
+	CTimer inPipeTimer{ true, 2000L };
 
 	int mScreenNo = -1;
 	float mCx = -1;

@@ -1,6 +1,6 @@
 #pragma once
-#pragma once
 #include "BaseMarioState.h"
+#include "Timer.h"
 
 
 ////RACOON MARIO
@@ -57,6 +57,10 @@ public:
     virtual void AttackUpdate(DWORD dt);
 
     virtual void Render();
+
+    CTimer flyTimer{ true, 250L };
+    CTimer pmeterTimer{ true, 4000L };
+    CTimer attackTimer{ true, 400L };
 
     float MAX_FLY_HEIGHT = 315;
 };

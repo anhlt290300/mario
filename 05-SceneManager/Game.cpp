@@ -492,7 +492,8 @@ void CGame::_ParseSection_SCENES(string line)
 }
 
 /*
-	Load game campaign file and load/initiate first scene
+	Load game 
+	paign file and load/initiate first scene
 */
 void CGame::Load(LPCWSTR gameFile)
 {
