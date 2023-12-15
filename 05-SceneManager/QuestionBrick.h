@@ -1,5 +1,6 @@
 #pragma once
 #include "GameObject.h"
+#include "AssetIDs.h"
 
 #define QUESTION_BRICK_BBOX_WIDTH 16
 #define QUESTION_BRICK_BBOX_HEIGHT 16
@@ -15,6 +16,8 @@
 #define QUESTION_BRICK_MAX_HEIGHT 10 
 #define QUESTION_BRICK_SPEED_UP 0.5f
 #define QUESTION_BRICK_SPEED_DOWN 0.1f
+
+
 
 class CQuestionBrick :
     public CGameObject

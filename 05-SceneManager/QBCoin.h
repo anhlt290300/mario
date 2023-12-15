@@ -30,7 +30,7 @@ protected:
 public:
 	virtual void GetBoundingBox(float& left, float& top, float& right, float& bottom) { left = top = right = bottom = 0; }
 	virtual void Render();
-	QBCoin(float x, float y);
+	QBCoin(float x, float y ,int score);
 
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
 	virtual void OnNoCollision(DWORD dt);

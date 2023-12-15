@@ -4,7 +4,7 @@
 #include "PlayScene.h"
 #include "Mushroom.h"
 #include "PieceBrick.h"
-
+#include "AssetIDs.h"
 CGoldBrick::CGoldBrick(float x, float y, int model)
 {
 	this->objType = model;
@@ -57,7 +57,7 @@ void CGoldBrick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 	if (isUnbox) {
 		if (objType == GOLD_BRICK_MUSHROOM) {
-			CMushroom* mushroom = new CMushroom(x, y);
+			CMushroom* mushroom = new CMushroom(x, y, SCORE_MUSHROOM);
 			mushroom->SetState(MUSHROOM_STATE_UP);
 			scene->objects.insert(scene->objects.begin() + 1, mushroom);
 		}

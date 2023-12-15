@@ -22,6 +22,8 @@ protected:
 	float x;
 	float y;
 
+	int score;
+
 	float vx;
 	float vy;
 
@@ -43,13 +45,16 @@ public:
 	void RenderBoundingBox();
 
 	CGameObject();
-	CGameObject(float x, float y) :CGameObject() { this->x = x; this->y = y; }
+	CGameObject(float x, float y) :CGameObject() { this->x = x; this->y = y; this->score = 0; }
 
 	float GetX() { return this->x; }
 	float GetY() { return this->y; }
 
 	float GetVX() { return this->vx; }
 	float GetVY() { return this->vy; }
+
+	int GetScore() { return this->score; }
+	virtual void SetScore(int score) { this->score = score; }
 
 	void SetVX(float velo_x) { this->vx = velo_x; }
 	void SetVY(float velo_y) { this->vy = velo_y; }

@@ -1,11 +1,12 @@
 #include "Leaf.h"
 #include "Mario.h"
 #include "PlayScene.h"
-
-CLeaf::CLeaf(float x, float y)
+#include "Score.h"
+CLeaf::CLeaf(float x, float y , int score)
 {
 	this->x = x;
 	this->y = y;
+	this->score = score;
 
 	this->ay = 0;
 	this->ax = 0;
@@ -17,10 +18,15 @@ CLeaf::CLeaf(float x, float y)
 
 void CLeaf::GetBoundingBox(float& left, float& top, float& right, float& bottom)
 {
-	left = x - LEAF_BBOX_WIDTH / 2;
-	top = y - LEAF_BBOX_HEIGHT / 2;
-	right = x + LEAF_BBOX_WIDTH;
-	bottom = y + LEAF_BBOX_HEIGHT;
+	if(beforeDelete) {
+		left = top = right = bottom = 0;
+	}
+	else {
+		left = x - LEAF_BBOX_WIDTH / 2;
+		top = y - LEAF_BBOX_HEIGHT / 2;
+		right = x + LEAF_BBOX_WIDTH;
+		bottom = y + LEAF_BBOX_HEIGHT;
+	}
 }
 
 void CLeaf::Render()
@@ -32,15 +38,24 @@ void CLeaf::Render()
 	else {
 		aniId = ID_ANI_LEAF_LEFT;
 	}
-	CAnimations::GetInstance()->Get(aniId)->Render(x, y);
+	if (!beforeDelete) CAnimations::GetInstance()->Get(aniId)->Render(x, y);
+
+	for (int i = 0; i < ListEffect.size(); i++) {
+		ListEffect[i]->Render();
+	}
 
 	//RenderBoundingBox();
 }
 
 void CLeaf::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
+	if (beforeDelete) {
+		ax = ay = 0;
+	}
+
 	vy += ay * dt;
 	vx += ax * dt;
+
 
 	if (y <= minY)
 	{
@@ -58,6 +73,15 @@ void CLeaf::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		{
 			x = limitRight;
 			vx = -LEAF_SPEED_X;
+		}
+	}
+
+	for (size_t i = 0; i < ListEffect.size(); i++)
+	{
+		ListEffect[i]->Update(dt, coObjects);
+		if (ListEffect[i]->isDeleted) {
+			ListEffect.erase(ListEffect.begin() + i);
+			isDeleted = true;
 		}
 	}
 
@@ -84,15 +108,15 @@ void CLeaf::OnNoCollision(DWORD dt)
 
 void CLeaf::OnCollisionWith(LPCOLLISIONEVENT e)
 {
-	//CMario* mario = (CMario*)((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
-	//if (e->obj == mario) {
-	//	//TODO: Score
-	//	mario->obj = new Score(this->x, this->y, SCORE_1000);
-	//	mario->SetLevel(MARIO_LEVEL_RACOON);
-	//	mario->ListEffect.push_back(mario->obj);
-	//	isDeleted = true;
-	//	
-	//}
+	CMario* mario = (CMario*)((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
+	if (e->obj == mario) {
+		//TODO: Score
+		CScore* _obj = new CScore(GetX(), GetY(), SCORE_1000);
+		mario->SetLevel(MARIO_LEVEL_RACOON);
+		ListEffect.push_back(_obj);
+		beforeDelete = true;
+		mario->SetScore(SCORE_LEAF);
+	}
 }
 
 void CLeaf::SetState(int state)

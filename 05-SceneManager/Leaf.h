@@ -27,8 +27,11 @@ protected:
 	float limitLeft, limitRight;
 
 	BOOLEAN isFall = false;
+	vector<LPGAMEOBJECT> ListEffect;
+	bool beforeDelete = false;
+
 public:
-	CLeaf(float x, float y);
+	CLeaf(float x, float y, int score);
 	virtual void GetBoundingBox(float& left, float& top, float& right, float& bottom);
 	virtual void Render();
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);

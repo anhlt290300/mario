@@ -3,12 +3,13 @@
 #include "PlayScene.h"
 #include "Score.h"
 
-CMushroom::CMushroom(float x, float y) : CGameObject(x, y)
+CMushroom::CMushroom(float x, float y, int score) : CGameObject(x, y)
 {
 	this->ay = 0;
 	this->ax = 0;
 	this->x = x;
 	this->y = y;
+	this->score = score;
 
 	minY = y - MUSHROOM_BBOX_HEIGHT;
 }
@@ -115,9 +116,10 @@ void CMushroom::OnCollisionWith(LPCOLLISIONEVENT e)
 	
 		if (mario->GetLevel() == MARIO_LEVEL_RACOON) {
 			CScore* _obj = new CScore(GetX(), GetY(), SCORE_2000);
+			this->SetScore(2000);
 			ListEffect.push_back(_obj);
 			beforeDelete = true;
-			mario->SetLive(1);
+			mario->SetLive(1);			
 		}
 		else {
 			mario->SetLevel(MARIO_LEVEL_BIG);
@@ -125,6 +127,7 @@ void CMushroom::OnCollisionWith(LPCOLLISIONEVENT e)
 			ListEffect.push_back(_obj);
 			beforeDelete = true;
 		}
+		mario->SetScore(SCORE_MUSHROOM);
 			
 	}
 }

@@ -16,11 +16,11 @@ void QBCoin::Render()
 	//RenderBoundingBox();
 }
 
-QBCoin::QBCoin(float x, float y)
+QBCoin::QBCoin(float x, float y , int score = 0)
 {
 	this->x = x;
 	this->y = y;
-
+	this->score = score;
 	this->ay = 0;
 	this->ax = 0;
 

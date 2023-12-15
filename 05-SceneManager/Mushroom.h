@@ -1,6 +1,6 @@
 #pragma once
 #include "GameObject.h"
-
+#include "AssetIDs.h"
 #define MUSHROOM_BBOX_WIDTH 16
 #define MUSHROOM_BBOX_HEIGHT 16
 #define ID_ANI_MUSHROOM 105
@@ -25,7 +25,7 @@ protected:
 	bool beforeDelete = false;
 
 public:
-	CMushroom(float x, float y);
+	CMushroom(float x, float y, int score);
 
 	virtual void GetBoundingBox(float& left, float& top, float& right, float& bottom);
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);

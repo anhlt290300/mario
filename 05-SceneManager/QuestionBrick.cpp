@@ -59,21 +59,22 @@ void CQuestionBrick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	if (isOpened) {
 		if (objType == QUESTION_BRICK_ITEM) {
 			if (mario->GetLevel() == MARIO_LEVEL_BIG) {
-				CLeaf* leaf = new CLeaf(x, y);
+				CLeaf* leaf = new CLeaf(x, y, SCORE_LEAF);
 				leaf->SetState(LEAF_STATE_UP);
 				scene->objects.push_back(leaf);
 			}
 			if (mario->GetLevel() == MARIO_LEVEL_SMALL) {
-				CMushroom* mushroom = new CMushroom(x, y);
+				CMushroom* mushroom = new CMushroom(x, y, SCORE_MUSHROOM);
 				mushroom->SetState(MUSHROOM_STATE_UP);
 				scene->objects.insert(scene->objects.begin() + 1, mushroom);
 			}
 		}
 		else {
-			QBCoin* coin = new QBCoin(x, y);
+			QBCoin* coin = new QBCoin(x, y , SCORE_COIN);
 			coin->SetState(QB_COIN_STATE_UP);
 			scene->objects.insert(scene->objects.begin() + 1, coin);
 			mario->SetCoin(mario->GetCoin() + 1);
+			mario->SetScore(coin->GetScore());
 		}
 		isOpened = false;
 	}
