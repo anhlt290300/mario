@@ -29,7 +29,6 @@ protected:
 	BOOLEAN isFall = false;
 	vector<LPGAMEOBJECT> ListEffect;
 	bool beforeDelete = false;
-
 public:
 	CLeaf(float x, float y, int score);
 	virtual void GetBoundingBox(float& left, float& top, float& right, float& bottom);

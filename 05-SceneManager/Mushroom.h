@@ -33,6 +33,7 @@ public:
 
 	virtual void SetState(int state);
 
+
 	virtual void OnNoCollision(DWORD dt);
 	virtual int IsCollidable() { return 1; }
 	virtual void OnCollisionWith(LPCOLLISIONEVENT e);

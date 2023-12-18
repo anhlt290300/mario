@@ -179,7 +179,7 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 		OnCollisionWithBackgroundBlock(e);
 	else if (dynamic_cast<CQuestionBrick*>(e->obj))
 		OnCollisionWithQuestionBrick(e);
-	else if (dynamic_cast<CPiranha*>(e->obj))
+	else if (dynamic_cast<CPiranha*>(e->obj) || dynamic_cast<CPiranhaFire*>(e->obj))
 		OnCollisionWithPiranha(e);
 	else if (dynamic_cast<CFireBall*>(e->obj))
 		OnCollisionWithFireball(e);
@@ -194,12 +194,13 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 void CMario::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
 {
 	CGoomba* goomba = dynamic_cast<CGoomba*>(e->obj);
-
+	this->SetScore(SCORE_GOOMBA);
 	// jump on top >> kill Goomba and deflect a bit 
 	if (e->ny < 0)
 	{
 		if (goomba->GetState() != GOOMBA_STATE_DIE)
 		{
+			goomba->BeforeDelete();
 			if (goomba->GetType() == NORMAL_GOOMBA) {
 				goomba->SetState(GOOMBA_STATE_DIE);
 				vy = -MARIO_JUMP_DEFLECT_SPEED;
@@ -258,8 +259,8 @@ void CMario::OnCollisionWithQuestionBrick(LPCOLLISIONEVENT e)
 
 void CMario::OnCollisionWithPiranha(LPCOLLISIONEVENT e)
 {
-	//FirePiranhaPlant* firepiranha = dynamic_cast<FirePiranhaPlant*>(e->obj);
-	//DebugOut(L"va cham"); 
+	this->SetScore(SCORE_PIRANHA);
+
 	if (e->ny < 0 && dynamic_cast<CPiranha*>(e->obj) || e->ny < 0 && dynamic_cast<CPiranhaFire*>(e->obj)) {
 
 		vy = -MARIO_JUMP_DEFLECT_SPEED;
@@ -268,6 +269,8 @@ void CMario::OnCollisionWithPiranha(LPCOLLISIONEVENT e)
 	}
 	else SetHurt();
 }
+
+
 
 void CMario::OnCollisionWithFireball(LPCOLLISIONEVENT e)
 {
@@ -282,9 +285,10 @@ void CMario::OnCollisionWithKoopas(LPCOLLISIONEVENT e)
 {
 	Koopas* koopas = dynamic_cast<Koopas*>(e->obj);
 	CGame* game = CGame::GetInstance();
-
+	this->SetScore(SCORE_KOOPA);
 	if (e->ny < 0)
 	{
+
 		if (koopas->GetState() == KOOPAS_STATE_IS_KICKED) {
 			if (koopas->isDefend) {
 				koopas->SetState(KOOPAS_STATE_DEFEND);

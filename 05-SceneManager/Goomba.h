@@ -12,7 +12,7 @@
 #define GOOMBA_RED_WING_BBOX_HEIGHT 16
 #define GOOMBA_BBOX_HEIGHT_DIE 7
 
-#define GOOMBA_DIE_TIMEOUT 500
+#define GOOMBA_DIE_TIMEOUT 600
 #define LIMIT_TIME_WING_WALKING 1000
 
 #define GOOMBA_STATE_WALKING 100
@@ -56,6 +56,9 @@ protected:
 	ULONGLONG die_start;
 	ULONGLONG wing_walk_start;
 
+	vector<LPGAMEOBJECT> ListEffect;
+	bool beforeDelete = false;
+
 	virtual void GetBoundingBox(float& left, float& top, float& right, float& bottom);
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
 	virtual void Render();
@@ -69,6 +72,7 @@ protected:
 public:
 	CGoomba(float x, float y, int type);
 	virtual void SetState(int state);
+	void BeforeDelete() { beforeDelete = true; };
 
 	BOOLEAN isOnPlatform;
 	BOOLEAN isWalking = false;

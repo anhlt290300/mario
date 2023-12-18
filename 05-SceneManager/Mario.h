@@ -183,12 +183,10 @@ class CMario : public CGameObject
 	void OnCollisionWithPortal(LPCOLLISIONEVENT e);
 	void OnCollisionWithBackgroundBlock(LPCOLLISIONEVENT e);
 	void OnCollisionWithQuestionBrick(LPCOLLISIONEVENT e);
-	void OnCollisionWithLeaf(LPCOLLISIONEVENT e);
 	void OnCollisionWithPiranha(LPCOLLISIONEVENT e);
 	void OnCollisionWithFireball(LPCOLLISIONEVENT e);
 	void OnCollisionWithKoopas(LPCOLLISIONEVENT e);
 	void OnCollisionWithGoldBrick(LPCOLLISIONEVENT e);
-	void OnCollisionWithPortalIn(LPCOLLISIONEVENT e);
 
 
 public:

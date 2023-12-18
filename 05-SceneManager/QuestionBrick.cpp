@@ -22,7 +22,7 @@ void CQuestionBrick::Render()
 		aniId = ID_ANI_QUESTION_BRICK_EMPTY;
 	}
 	CAnimations::GetInstance()->Get(aniId)->Render(x, y);
-	RenderBoundingBox();
+	//RenderBoundingBox();
 }
 
 CQuestionBrick::CQuestionBrick(float x, float y, int type)

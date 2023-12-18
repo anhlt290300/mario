@@ -113,17 +113,17 @@ void CMushroom::OnCollisionWith(LPCOLLISIONEVENT e)
 	CMario* mario = (CMario*)((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
 	if (e->obj == mario) {
 		//TODO: Score
-	
+		DebugOut(L"mario");
+
 		if (mario->GetLevel() == MARIO_LEVEL_RACOON) {
-			CScore* _obj = new CScore(GetX(), GetY(), SCORE_2000);
-			this->SetScore(2000);
+			CScore* _obj = new CScore(GetX(), GetY(), SCORE_MUSHROOM);
 			ListEffect.push_back(_obj);
 			beforeDelete = true;
 			mario->SetLive(1);			
 		}
 		else {
 			mario->SetLevel(MARIO_LEVEL_BIG);
-			CScore* _obj = new CScore(GetX(), GetY(), SCORE_1000);
+			CScore* _obj = new CScore(GetX(), GetY(), SCORE_MUSHROOM);
 			ListEffect.push_back(_obj);
 			beforeDelete = true;
 		}

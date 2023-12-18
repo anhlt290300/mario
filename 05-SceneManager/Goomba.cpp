@@ -1,6 +1,7 @@
 #include "Goomba.h"
 #include "Mario.h"
 #include "PlayScene.h"
+#include "Score.h"
 
 CGoomba::CGoomba(float x, float y, int type) :CGameObject(x, y)
 {
@@ -49,19 +50,23 @@ void CGoomba::OnNoCollision(DWORD dt)
 
 void CGoomba::OnCollisionWith(LPCOLLISIONEVENT e)
 {
-	if (!e->obj->IsBlocking(e->nx, e->ny, this)) return;
-	if (dynamic_cast<CGoomba*>(e->obj)) return;
+	
+	
+		if (e->ny != 0)
+		{
+			vy = 0;
+			isOnPlatform = true;
+		}
+		else if (e->nx != 0)
+		{
+			vx = -vx;
+			nx = -nx;
+		}
 
-	if (e->ny != 0)
-	{
-		vy = 0;
-		isOnPlatform = true;
-	}
-	else if (e->nx != 0)
-	{
-		vx = -vx;
-		nx = -nx;
-	}
+		if (!e->obj->IsBlocking(e->nx, e->ny, this)) return;
+		if (dynamic_cast<CGoomba*>(e->obj)) return;
+		CMario* mario = (CMario*)((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
+		
 }
 
 void CGoomba::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
@@ -69,6 +74,12 @@ void CGoomba::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	if (!checkObjectInCamera(this)) return;
 	vy += ay * dt;
 	vx += ax * dt;
+
+	if (beforeDelete) {
+		CScore* _obj = new CScore(GetX(), GetY(), SCORE_GOOMBA);
+		ListEffect.push_back(_obj);
+		beforeDelete = false;
+	}
 
 	if ((state == GOOMBA_STATE_DIE) && (GetTickCount64() - die_start > GOOMBA_DIE_TIMEOUT))
 	{
@@ -119,6 +130,15 @@ void CGoomba::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 	}
 
+	for (size_t i = 0; i < ListEffect.size(); i++)
+	{
+		ListEffect[i]->Update(dt, coObjects);
+		if (ListEffect[i]->isDeleted) {
+			ListEffect.erase(ListEffect.begin() + i);
+			isDeleted = true;
+		}
+	}
+
 	CGameObject::Update(dt, coObjects);
 	CCollision::GetInstance()->Process(this, dt, coObjects);
 }
@@ -165,6 +185,10 @@ void CGoomba::Render()
 
 
 	CAnimations::GetInstance()->Get(aniId)->Render(x, y);
+
+	for (int i = 0; i < ListEffect.size(); i++) {
+		ListEffect[i]->Render();
+	}
 	//RenderBoundingBox();
 }
 
