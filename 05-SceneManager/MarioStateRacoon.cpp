@@ -1,21 +1,32 @@
 #include "MarioStateRacoon.h"
 #include "Mario.h"
+#include "Tail.h"
 #include "PlayScene.h"
 
 MarioStateRacoon::MarioStateRacoon(CMario* mario) : BaseMarioState(mario)
 {
-	
+	this->tail = new CTail(mario);
 }
 
 MarioStateRacoon::~MarioStateRacoon()
 {
-	
+	delete tail;
 }
 
 void MarioStateRacoon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
 	BaseMarioState::Update(dt, coObjects);
 
+	if (attackTimer.GetState() == TimerState::RUNNING) {
+		if (tail->tracking) {
+			tail->Update(dt, coObjects);
+		}
+	}
+	if (attackTimer.GetState() == TimerState::TIMEOVER) {
+		if (!tail->tracking) {
+			tail->IsTracking();
+		}
+	}
 }
 
 void MarioStateRacoon::JumpUpdate(DWORD dt)
@@ -28,6 +39,7 @@ void MarioStateRacoon::JumpUpdate(DWORD dt)
 
 	CGame* game = CGame::GetInstance();
 
+	flyTimer.Update(dt);
 	CPlayScene* playScene = (LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene();
 
 	//DebugOut(L"Mario Position: %f\nCamera Position: %f\n\n", mario->GetY(), playScene->map->GetCamY());
@@ -38,14 +50,14 @@ void MarioStateRacoon::JumpUpdate(DWORD dt)
 		}
 		mario->jumpState = MarioJumpState::Idle;
 
-		if (game->IsKeyDown(DIK_S)) {
+		if (game->IsKeyPressed(DIK_S)) {
 			mario->jumpState = MarioJumpState::Jump;
 			mario->isOnPlatform = false;
 			mario->_jumpStartHeight = y;
 		}
 	}
 
-	else if (game->IsKeyDown(DIK_S)) {
+	else if (game->IsKeyPressed(DIK_S)) {
 		if (mario->powerMeter >= PMETER_MAX) {
 			mario->jumpState = MarioJumpState::Fly;
 			mario->_jumpStartHeight = y;
@@ -94,9 +106,16 @@ void MarioStateRacoon::JumpUpdate(DWORD dt)
 		}
 		break;
 	case MarioJumpState::Float:
-		break;
+		vy = min(vy, MARIO_FLOATING_SPEED);
+		if (flyTimer.GetState() != TimerState::RUNNING) {
+			mario->jumpState = MarioJumpState::Fall;
+		}
 	case MarioJumpState::Fall:
-		
+		if (game->IsKeyPressed(DIK_S)) {
+			mario->jumpState = MarioJumpState::Float;
+			flyTimer.Reset();
+			flyTimer.Start();
+		}
 		break;
 	}
 
@@ -115,11 +134,38 @@ void MarioStateRacoon::PowerMeterUpdate(DWORD dt)
 
 	float maxRun = abs(vx) > MARIO_RUN_SPEED * 0.85f;
 
+	pmeterTimer.Update(dt);
+
+	if (pmeterTimer.GetState() != TimerState::RUNNING) {
+		if (pmeterTimer.GetState() == TimerState::TIMEOVER) {
+			mario->powerMeter = 0;
+			pmeterTimer.Stop();
+		}
+
+		if (maxRun && mario->isOnPlatform)
+			mario->powerMeter = max(0.0f, min(mario->powerMeter + PMETER_UP_STEP * dt, PMETER_MAX + 1));
+		else if (mario->powerMeter > 0)
+			mario->powerMeter = max(0.0f, min(mario->powerMeter - PMETER_DOWN_STEP * dt, PMETER_MAX));
+
+		if (mario->powerMeter >= PMETER_MAX && game->IsKeyPressed(DIK_S)) {
+			pmeterTimer.Reset();
+			pmeterTimer.Start();
+		}
+	}
 }
 
 void MarioStateRacoon::AttackUpdate(DWORD dt)
 {
-	
+	attackTimer.Update(dt);
+
+	CGame* game = CGame::GetInstance();
+
+	if (game->IsKeyPressed(DIK_A)) {
+		if (attackTimer.GetState() != TimerState::RUNNING) {
+			attackTimer.Reset();
+			attackTimer.Start();
+		}
+	}
 }
 
 void MarioStateRacoon::Render()
@@ -139,8 +185,16 @@ void MarioStateRacoon::Render()
 			aniId = ID_ANI_RACOON_MARIO_FLOATING_RIGHT;
 			break;
 		case MarioJumpState::Fall:
+			if (attackTimer.GetState() != TimerState::RUNNING)
+				aniId = ID_ANI_RACOON_MARIO_JUMP_WALK_RIGHT;
+			else
+				aniId = ID_ANI_RACOON_MARIO_ATTACK_FROM_RIGHT;
 			break;
 		case MarioJumpState::Jump:
+			if (attackTimer.GetState() != TimerState::RUNNING)
+				aniId = ID_ANI_RACOON_MARIO_JUMP_WALK_RIGHT;
+			else
+				aniId = ID_ANI_RACOON_MARIO_ATTACK_FROM_RIGHT;
 			break;
 		case MarioJumpState::HighJump:
 			aniId = ID_ANI_RACOON_MARIO_JUMP_WALK_RIGHT;
@@ -152,6 +206,10 @@ void MarioStateRacoon::Render()
 
 	else if (mario->isSliding && mario->GetVX() != 0) {
 		aniId = ID_ANI_RACOON_MARIO_BRACE_RIGHT;
+	}
+	else if (attackTimer.GetState() == TimerState::RUNNING) {
+		aniId = ID_ANI_RACOON_MARIO_ATTACK_FROM_RIGHT;
+		tail->Render();
 	}
 	else {
 
