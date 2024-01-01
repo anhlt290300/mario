@@ -52,6 +52,7 @@
     <ClCompile Include="GoldBrick.cpp" />
     <ClCompile Include="PieceBrick.cpp" />
     <ClCompile Include="Tail.cpp" />
+    <ClCompile Include="IntroScene.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Animation.h" />
@@ -109,6 +110,7 @@
     <ClInclude Include="GoldBrick.h" />
     <ClInclude Include="PieceBrick.h" />
     <ClInclude Include="Tail.h" />
+    <ClInclude Include="IntroScene.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="05-SceneManager.rc" />
