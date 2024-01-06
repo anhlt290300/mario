@@ -187,6 +187,7 @@ class CMario : public CGameObject
 	void OnCollisionWithFireball(LPCOLLISIONEVENT e);
 	void OnCollisionWithKoopas(LPCOLLISIONEVENT e);
 	void OnCollisionWithGoldBrick(LPCOLLISIONEVENT e);
+	void OnCollisionWithPortalIn(LPCOLLISIONEVENT e);
 
 
 public:

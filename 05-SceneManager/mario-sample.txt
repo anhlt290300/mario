@@ -1,6 +1,6 @@
 [SETTINGS]
-start	8
-width	320
+start	3
+width	280
 height	240 
 
 #id	type	file
@@ -12,6 +12,7 @@ height	240
 6	world_1-1.txt
 7	world1-1-1.txt
 8	world-map.txt
+3	intro.txt
 
 # id	file 
 [TEXTURES]

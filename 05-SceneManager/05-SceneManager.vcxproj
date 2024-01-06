@@ -186,6 +186,7 @@
     <ClCompile Include="Platform.cpp" />
     <ClCompile Include="PlayScene.cpp" />
     <ClCompile Include="Portal.cpp" />
+    <ClCompile Include="PortalIn.cpp" />
     <ClCompile Include="PowerBar.cpp" />
     <ClCompile Include="QBCoin.cpp" />
     <ClCompile Include="QuestionBrick.cpp" />
@@ -242,6 +243,7 @@
     <ClInclude Include="Platform.h" />
     <ClInclude Include="PlayScene.h" />
     <ClInclude Include="Portal.h" />
+    <ClInclude Include="PortalIn.h" />
     <ClInclude Include="PowerBar.h" />
     <ClInclude Include="QBCoin.h" />
     <ClInclude Include="QuestionBrick.h" />

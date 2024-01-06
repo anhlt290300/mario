@@ -18,7 +18,7 @@
 #include "HUD.h"
 #include "Koopas.h"
 #include "GoldBrick.h"
-
+#include "PortalIn.h"
 
 #include "SampleKeyEventHandler.h"
 
@@ -197,7 +197,24 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		obj = new CPortal(x, y, r, b, scene_id);
 		break;
 	}
+	case OBJECT_TYPE_PORTAL_IN:
+	{
 
+		float width = (float)atof(tokens[3].c_str());
+		float height = (float)atof(tokens[4].c_str());
+		int dir = atoi(tokens[5].c_str());
+		float cx = atoi(tokens[6].c_str());
+		float cy = atoi(tokens[7].c_str());
+		int scID = atoi(tokens[8].c_str());
+
+		obj = new CPortalIn(
+			x, y,
+			width, height, dir,
+			cx, cy, scID
+		);
+
+		break;
+	}
 	default:
 		DebugOut(L"[ERROR] Invalid object type: %d\n", object_type);
 		return;

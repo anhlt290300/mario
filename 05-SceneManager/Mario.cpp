@@ -17,7 +17,7 @@
 #include "Koopas.h"
 #include "Score.h"
 #include "GoldBrick.h"
-
+#include "PortalIn.h"
 
 #include "BaseMarioState.h"
 #include "MarioStateSmall.h"
@@ -187,8 +187,8 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 		OnCollisionWithKoopas(e);
 	else if (dynamic_cast<CGoldBrick*>(e->obj))
 		OnCollisionWithGoldBrick(e);
-	//else if (dynamic_cast<PortalIn*>(e->obj))
-		//OnCollisionWithPortalIn(e);
+	else if (dynamic_cast<CPortalIn*>(e->obj))
+		OnCollisionWithPortalIn(e);
 }
 
 void CMario::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
@@ -343,6 +343,31 @@ void CMario::OnCollisionWithGoldBrick(LPCOLLISIONEVENT e)
 	if (e->ny > 0 && !goldBrick->isEmpty) {
 		//isGoThroughBlock = false;
 		goldBrick->SetState(GOLD_BRICK_STATE_UP);
+	}
+}
+
+void CMario::OnCollisionWithPortalIn(LPCOLLISIONEVENT e)
+{
+
+	LPGAME game = CGame::GetInstance();
+	CPortalIn* p = (CPortalIn*)e->obj;//dynamic_cast<PortalIn*>(e->obj);
+	if (e->ny != 0) {
+		if ((p->portal_dir == -1 && game->IsKeyDown(DIK_DOWN)) || (p->portal_dir == 1 && game->IsKeyDown(DIK_S))) {
+			if (p->sceneNo == HIDDEN_SCENE_ID) {
+				DebugOut(L"New map position: x: %f %f\n", p->GetCX(), p->GetCY());
+				if (inPipeTimer.GetState() != TimerState::RUNNING) {
+					inPipeTimer.Reset();
+					inPipeTimer.Start();
+					mScreenNo = p->sceneNo;
+					mCx = p->GetCX();
+					mCy = p->GetCY();
+				}
+			}
+			if (p->sceneNo == MAIN_SCENE_ID) {
+				DebugOut(L"New map position: x: %f %f\n", p->GetCX(), p->GetCY());
+				CGame::GetInstance()->SwitchToMainMap(p->sceneNo, p->GetCX(), p->GetCY());
+			}
+		}
 	}
 }
 
