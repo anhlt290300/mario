@@ -47,6 +47,6 @@ public:
 	float MARIO_RUN_SPEED = 0.48f / 3;
 
 	float PMETER_UP_STEP = 0.008f;
-	float PMETER_DOWN_STEP = 0.0016f;
+	float PMETER_DOWN_STEP = 0.003f;
 };
 

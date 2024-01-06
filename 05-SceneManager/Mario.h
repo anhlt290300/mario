@@ -23,6 +23,8 @@
 #define MARIO_GRAVITY			0.0018f
 
 #define MARIO_GRAVITY_IN_PIPE	0.00008f
+#define MARIO_GRAVITY_OUT_PIPE	-0.00008f
+
 
 #define MARIO_JUMP_DEFLECT_SPEED  0.4f
 
@@ -151,7 +153,7 @@
 
 #define MAX_FLY_SPEED 333.0f
 
-#define MARIO_RUN_DRAG_FORCE 0.0005f
+#define MARIO_RUN_DRAG_FORCE 0.001f
 #define MARIO_WALK_DRAG_FORCE 0.0002f
 
 #define MARIO_SKID_ACCELERATION 0.0006f
@@ -281,7 +283,9 @@ public:
 	void SetLive(int l) { live = l; }
 	int GetLive() { return live; }
 
-	CTimer inPipeTimer{ true, 2000L };
+	int In = 1;
+
+	CTimer inPipeTimer{ true, 2500L };
 
 	int mScreenNo = -1;
 	float mCx = -1;

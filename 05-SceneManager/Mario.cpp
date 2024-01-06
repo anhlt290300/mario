@@ -25,6 +25,7 @@
 #include "MarioStateRacoon.h"
 
 #include "Collision.h"
+#include "AssetIDs.h"
 
 CMario::CMario(float x, float y) : CGameObject(x, y) {
 	this->stateHandler = new MarioStateSmall(this);
@@ -55,7 +56,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	inPipeTimer.Update(dt);
 	ay = MARIO_GRAVITY;
 	//DebugOut(L"x: %f\n", x);
-	//DebugOut(L"y: %f\n", y);
+	DebugOut(L"isInpipe: %d\n", isInPipe);
 
 	if (inPipeTimer.GetState() == TimerState::TIMEOVER && mScreenNo != -1) {
 		int _mScreenNo = mScreenNo;
@@ -65,7 +66,8 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		mScreenNo = -1;
 		mCx = -1;
 		mCy = -1;
-		CGame::GetInstance()->SwitchToHiddenMap(_mScreenNo, _mCx, _mCy);
+		if(this->In == 0) CGame::GetInstance()->SwitchToHiddenMap(_mScreenNo, _mCx, _mCy);
+		else CGame::GetInstance()->SwitchToMainMap(_mScreenNo, _mCx, _mCy);
 	}
 
 	LPGAME game = CGame::GetInstance();
@@ -106,7 +108,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		}
 	}
 
-	if (isReturnY) {
+	if (isReturnY && !isInPipe) {
 		//DebugOut(L"isReturnY %d\n", isReturnY);
 		y = y - 10;
 		isReturnY = false;
@@ -114,7 +116,8 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 	if (isInPipe) {
 		vx = 0;
-		ay = MARIO_GRAVITY_IN_PIPE;
+		if(!In) ay = MARIO_GRAVITY_IN_PIPE;
+		else ay = MARIO_GRAVITY_OUT_PIPE;
 	}
 
 	this->vy += ay * dt;
@@ -230,8 +233,11 @@ void CMario::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
 
 void CMario::OnCollisionWithCoin(LPCOLLISIONEVENT e)
 {
-	e->obj->Delete();
+	
 	coin++;
+	SetScore(SCORE_COIN);
+	e->obj->Delete();
+	
 }
 
 void CMario::OnCollisionWithPortal(LPCOLLISIONEVENT e)
@@ -358,14 +364,21 @@ void CMario::OnCollisionWithPortalIn(LPCOLLISIONEVENT e)
 				if (inPipeTimer.GetState() != TimerState::RUNNING) {
 					inPipeTimer.Reset();
 					inPipeTimer.Start();
+					this->In = 0;
 					mScreenNo = p->sceneNo;
 					mCx = p->GetCX();
 					mCy = p->GetCY();
 				}
 			}
 			if (p->sceneNo == MAIN_SCENE_ID) {
-				DebugOut(L"New map position: x: %f %f\n", p->GetCX(), p->GetCY());
-				CGame::GetInstance()->SwitchToMainMap(p->sceneNo, p->GetCX(), p->GetCY());
+				if (inPipeTimer.GetState() != TimerState::RUNNING) {
+					inPipeTimer.Reset();
+					inPipeTimer.Start();
+					this->In = 1;
+					mScreenNo = p->sceneNo;
+					mCx = p->GetCX();
+					mCy = p->GetCY();
+				}
 			}
 		}
 	}
@@ -395,7 +408,9 @@ void CMario::SetState(int state)
 
 void CMario::GetBoundingBox(float& left, float& top, float& right, float& bottom)
 {
-	stateHandler->GetBoundingBox(left, top, right, bottom);
+	if (isInPipe) {
+		left = top = right = bottom = 0;
+	}else stateHandler->GetBoundingBox(left, top, right, bottom);
 }
 
 BaseMarioState* CMario::GetStateHandler()

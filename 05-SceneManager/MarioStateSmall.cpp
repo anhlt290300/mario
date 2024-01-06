@@ -11,8 +11,10 @@ void MarioStateSmall::Render()
 	CAnimations* animations = CAnimations::GetInstance();
 	int aniId = -1;
 
-
-	if (!mario->isOnPlatform)
+	if (mario->isInPipe) {
+		aniId = ID_ANI_MARIO_SMALL_WARP;
+	}
+	else if (!mario->isOnPlatform)
 	{
 		//aniId = ID_ANI_MARIO_BRACE_RIGHT;
 		switch (mario->jumpState)
@@ -35,10 +37,7 @@ void MarioStateSmall::Render()
 		default:
 			break;
 		}
-	}
-	else if (mario->isInPipe) {
-		aniId = ID_ANI_MARIO_SMALL_WARP;
-	}
+	}	
 	else if (mario->isSliding && mario->GetVX() != 0) {
 		aniId = ID_ANI_MARIO_SMALL_BRACE_RIGHT;
 	}

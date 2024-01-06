@@ -172,8 +172,10 @@ void MarioStateRacoon::Render()
 {
 	CAnimations* animations = CAnimations::GetInstance();
 	int aniId = -1;
-
-	if (!mario->isOnPlatform)
+	if (mario->isInPipe) {
+		aniId = ID_ANI_RACOON_WARP;
+	}
+	else if (!mario->isOnPlatform)
 	{
 		//aniId = ID_ANI_MARIO_BRACE_RIGHT;
 		switch (mario->jumpState)
