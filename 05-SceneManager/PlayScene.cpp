@@ -134,7 +134,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		break;
 	}
 	case OBJECT_TYPE_BRICK: obj = new CBrick(x, y); break;
-	case OBJECT_TYPE_COIN: obj = new CCoin(x, y); break;
+	case OBJECT_TYPE_COIN: obj = new CCoin(x, y,0); break;
 	case OBJECT_TYPE_FIRE_PIRANHA: {
 		int type = (int)atof(tokens[3].c_str());
 		obj = new CPiranhaFire(x, y, type); //FirePiranhaPlant
@@ -346,7 +346,20 @@ void CPlayScene::Update(DWORD dt)
 
 	for (size_t i = 0; i < objects.size(); i++)
 	{
+		if (dynamic_cast<CGoldBrick*>(objects[i]) && CGame::GetInstance()->transform) {
+
+			if (!objects[i]->isDeleted) {
+				float x = objects[i]->GetX();
+				float y = objects[i]->GetY();
+				objects[i]->Delete();
+				CCoin* coin = new CCoin(x, y, 1);
+				objects.push_back(coin);
+
+			}
+		}
+	
 		objects[i]->Update(dt, &coObjects);
+		
 	}
 
 	// skip the rest if scene was already unloaded (Mario::Update might trigger PlayScene::Unload)

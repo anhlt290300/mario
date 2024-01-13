@@ -40,13 +40,11 @@ void CButtonP::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	GetBoundingBox(left, top, right, bottom);
 	//DebugOut(L"hmmm: %d\n", CCollision::IsOverlap(left, top, right, bottom, sl, st, sr, sb));
 	
-	DebugOut(L"sl: %f\n", left);
-	DebugOut(L"st: %f\n", top);
-	DebugOut(L"sr: %f\n", right);
-	DebugOut(L"sb: %f\n", bottom);
+
 	
 	if (CCollision::IsOverlap(left, top, right, bottom, sl, st, sr, sb) && state == BUTTON_P_STATE_AVALABLE) {
 		this->SetState(BUTTON_P_STATE_ENABLE);
+		CGame::GetInstance()->transform = true;
 	}
 
 	CGameObject::Update(dt, coObjects);

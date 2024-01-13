@@ -3,6 +3,7 @@
 #include "GameObject.h"
 #include "Animation.h"
 #include "Animations.h"
+#include "Timer.h"
 
 #define ID_ANI_COIN 11000
 
@@ -12,9 +13,15 @@
 
 class CCoin : public CGameObject {
 public:
-	CCoin(float x, float y) : CGameObject(x, y) {}
+	ULONGLONG range = -1;
+	int model;
+	CCoin(float x, float y, int model) : CGameObject(x, y) {
+		this->model = model;
+		if (model == 1)
+			range = GetTickCount64();
+	}
 	void Render();
-	void Update(DWORD dt);
+	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
 	void GetBoundingBox(float& l, float& t, float& r, float& b);
 	int IsBlocking() { return 0; }
 };
