@@ -18,6 +18,7 @@
 #include "Score.h"
 #include "GoldBrick.h"
 #include "PortalIn.h"
+#include "ButtonP.h"
 
 #include "BaseMarioState.h"
 #include "MarioStateSmall.h"
@@ -56,7 +57,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	inPipeTimer.Update(dt);
 	ay = MARIO_GRAVITY;
 	//DebugOut(L"x: %f\n", x);
-	DebugOut(L"isInpipe: %d\n", isInPipe);
+	//DebugOut(L"isInpipe: %d\n", isInPipe);
 
 	if (inPipeTimer.GetState() == TimerState::TIMEOVER && mScreenNo != -1) {
 		int _mScreenNo = mScreenNo;

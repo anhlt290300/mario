@@ -54,6 +54,7 @@
     <ClCompile Include="Tail.cpp" />
     <ClCompile Include="IntroScene.cpp" />
     <ClCompile Include="PortalIn.cpp" />
+    <ClCompile Include="ButtonP.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Animation.h" />
@@ -113,6 +114,7 @@
     <ClInclude Include="Tail.h" />
     <ClInclude Include="IntroScene.h" />
     <ClInclude Include="PortalIn.h" />
+    <ClInclude Include="ButtonP.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="05-SceneManager.rc" />
